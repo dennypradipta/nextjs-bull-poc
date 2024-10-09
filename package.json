@@ -3,24 +3,32 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
+    "lint": "next lint",
+    "dev": "concurrently \"npm:next:dev\" \"npm:queue\"",
     "start": "next start",
-    "lint": "next lint"
+    "next:dev": "next dev",
+    "queue": "node --import=tsx src/queues/entrypoint.ts",
+    "queue:prod": "node dist/entrypoint.js",
+    "queue:build": "tsc src/queues/entrypoint.ts src/queues/jobs/*.ts --outDir dist/ --esModuleInterop --module commonjs --resolveJsonModule --skipLibCheck --target es2020"
   },
   "dependencies": {
+    "axios": "^1.7.7",
+    "bull": "^4.16.3",
+    "concurrently": "^9.0.1",
+    "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.15"
+    "tsx": "^4.19.1"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.15",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.15"
+    "typescript": "^5"
   }
 }

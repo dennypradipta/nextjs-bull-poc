@@ -1,0 +1,23 @@
+FROM node:21-alpine
+
+WORKDIR /usr/queue
+
+# Install dependencies
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Copy the queue files
+RUN mkdir -p src/queues
+COPY src/queues src/queues
+
+# To check if files are copied correctly
+RUN ls -R src/queues
+
+# Build the queues
+RUN npm run queue:build
+
+# Install a process manager
+RUN npm install -g pm2
+
+# Run the queues
+CMD ["pm2-runtime", "npm run queue:prod"]
