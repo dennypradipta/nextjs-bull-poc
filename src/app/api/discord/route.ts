@@ -1,11 +1,11 @@
-"use server"
-
-import { discordQueue } from '@/queues/jobs/discord'
 import { NextResponse } from 'next/server'
+import Bull from 'bull';
 
-export async function POST() {
+export const discordQueue = new Bull('discord-queue', process.env.REDIS_URL || "redis://localhost:6379");
+
+export default async function POST() {
   // Send the WA
-  discordQueue.add({})
+  await discordQueue.add({})
 
   return NextResponse.json({ msg: 'Mail sent' })
 }

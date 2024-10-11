@@ -1,9 +1,9 @@
-"use server"
-
-import { pushNotificationQueue } from '@/queues/jobs/push-notification'
 import { NextResponse } from 'next/server'
+import Bull from 'bull';
 
-export async function POST(request: Request) {
+export const pushNotificationQueue = new Bull('push-notification-queue', process.env.REDIS_URL || "redis://localhost:6379");
+
+export default async function POST(request: Request) {
   const { id } = await request.json()
 
   // Send the email
